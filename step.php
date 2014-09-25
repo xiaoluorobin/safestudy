@@ -9,6 +9,11 @@
 </head>
 
 <body style="text-align:left;padding-left:100px" onload="prettyPrint()">
+
+<a href="http://robindemo.sdo.com/csss/index.html" target=blank>分享</a> 
+
+<p style="font-size:50px">危害分布</p>
+<img src="xss.jpg"/>
 <p style="font-size:50px">sql注入</p>
 
 <br/>
