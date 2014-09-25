@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<title>sql inject and xss introduction</title>
+	
+	<link href="slideshow.css" rel="stylesheet" />
+	<link href="theme.css" rel="stylesheet" />
+	<link href="talk.css" rel="stylesheet" />
+	<script src="prefixfree.min.js"></script>
+</head>
+<body data-duration="10">
+
+<header id="intro" class="slide">
+	<h1>
+	     sql注入与xss攻击基础介绍
+	</h2>
+	<p class="attribution">robin luo</p>
+</header>
+<section>
+	<header class="slide">
+		<h1>SQL 注入</h1>
+	</header>
+	
+	<section class="slide" title="CSSS: Introduction">
+		<h2>What is it?</h2>
+		<p>是发生于应用程序之数据库层的安全漏洞。简而言之，是在输入的字符串之中注入SQL指令，在设计不良的程序当中忽略了检查，那么这些注入进去的指令就会被数据库服务器误认为是正常的SQL指令而运行，因此遭到破坏。</p>
+	</section>
+	
+	<section class="slide">
+		<h2>危害</h2>
+		<ul>
+			<li class="delayed">数据表中的数据外泄，例如个人机密数据，账户数据，密码等。</li>
+			<li class="delayed">数据结构被黑客探知，得以做进一步攻击（例如SELECT * FROM sys.tables）。</li>
+			<li class="delayed">数据库服务器被攻击，系统管理员账户被窜改（例如ALTER LOGIN sa WITH PASSWORD='xxxxxx'）。</li>
+			<li class="delayed">取得系统较高权限后，有可能得以在网页加入恶意链接以及XSS。</li>
+			<li class="delayed">经由数据库服务器提供的操作系统支持，让黑客得以修改或控制操作系统（例如xp_cmdshell "net stop iisadmin"可停止服务器的IIS服务）。</li>
+                	<li class="delayed">......</li>
+
+		</ul>
+	</section>
+	
+	<section class="slide" id="navigation">
+		<h2>How</h2>
+		<p>某个网站的登录验证的SQL查询代码为
+
+ <pre><code lang="sql">strSQL = "SELECT * FROM users WHERE (name = '" + userName + "') and (pw = '"+ passWord +"');"</code></pre>
+
+恶意填入
+
+ <pre><code lang="sql">userName = "'1' OR '1'='1'"; </code></pre>
+
+与
+
+ <pre><code lang="sql">passWord = '"1' OR '1'='1'"; </code></pre>
+
+时，将导致原本的SQL字符串被填为
+
+ <pre><code lang="sql">strSQL = "SELECT * FROM users WHERE (name = '1' OR '1'='1') and (pw = '1' OR '1'='1');" </code></pre>
+
+也就是实际上运行的SQL命令会变成下面这样的
+
+ <pre><code lang="sql">strSQL = "SELECT * FROM users;" </code></pre>
+
+因此达到无账号密码，亦可登录网站。所以SQL注入攻击被俗称为黑客的填空游戏。</p>
+	</section>
+
+	<section class="slide">
+		<h2>实战</h2>
+		<p><a href="http://robindemo.sdo.com/login.php" target="blank">http://robindemo.sdo.com/login.php</a></p>
+       </section>
+
+	<section class="slide">
+		<h2>防范</h2>
+	
+		<p>子曰：病从口入. 控制输入</p>
+                	<ul>
+			<li class="delayed">在设计应用程序时，完全使用参数化查询（Parameterized Query）来设计数据访问功能。</li>
+			<li class="delayed">在组合SQL字符串时，先针对所传入的参数作字符取代（将单引号字符取代为连续2个单引号字符）。</li>
+                        <li class="delayed">使用防注入框架。</li>
+                        <li class="delayed">还有很多...</li>
+                      </ul>
+
+                      
+	</section>
+
+<section>
+	<header class="slide">
+		<h1>XSS攻击</h1>
+	</header>
+	
+	<section class="slide">
+		<h2>Thumbnail view</h2>
+		<p>Press Ctrl+H (or Shift+H if you're in Opera) now.</p>
+		<p class="delayed">Cool, huh? You can press Ctrl+Shift+H to see all slides (warning: can be slow!)</p>
+	</section>
+	
+	<section class="slide">
+		<h2>Timer</h2>
+		<ul>
+			<li>Timer in the form of a progress bar on the top</li>
+			<li>Define the talk duration with the attribute <code>data-duration</code> on the <code>body</code></li>
+			<li>Style the timer and the end state with the selectors <code>#timer</code> and <code>#timer.end</code> respectively.</li>
+		</ul>
+	</section>
+	
+	<section class="slide">
+		<h2>Presenter view</h2>
+		<p>This slide has presenter notes. They are only visible in presenter view (Ctrl+P or Shift+P).</p>
+		<p class="presenter-notes">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	</section>
+	
+	<section class="slide">
+		<style scoped>
+			h2 {
+				font-size: 200%;
+				font-weight: bold;
+			}
+		</style>
+		<h2><code>&lt;style scoped /&gt;</code></h2>
+		<p>You can use the HTML5 <code>scoped</code> attribute on style elements in slides, to only style the current slide or inside sections that include multiple slides to style all of them and nothing else.</p>
+		<p>For example, inspect this slide and then run <code>$$('style[scoped]')[0].sheet.cssRules[0].selectorText</code> in the console to see how the original selector gets changed.</p>
+	</section>
+	
+	<section class="slide">
+		<h2>More features</h2>
+		<ul>
+			<li class="delayed">IDs are dynamically assigned by JavaScript&hellip;</li>
+			<li class="delayed">&hellip;but you can also assign your own, bringing the best of both worlds</li>
+			<li class="delayed">Incremental display of slide contents (just add <code>class="delayed"</code>)</li>
+			<li class="delayed">Slide scaling based on window size (size everything you want to be scalable in ems)</li>
+			<li class="delayed">Document.title changing according to slide title (fetched either from the <code>title</code> attribute or the slide's heading)</li>
+		</ul>
+	</section>
+	
+	<section class="slide">
+		<h2>Drawbacks</h2>
+		<ul>
+			<li>Only supports modern browsers. Why?
+				<ul>
+					<li>More lightweight</li>
+					<li>Easier to understand code</li>	
+					<li>It's a presentation, so the environment is controlled anyway</li>
+				</ul>
+			</li>
+			<li>No mouse click to advance to the next slide. I consider it annoying.</li>
+			<li>Doesn't work in mobile :(</li>
+		</ul>
+	</section>
+</section>
+
+<section>
+	<header class="slide">
+		<h1>Plugins</h1>
+	</header>
+	
+	<section class="slide">
+		<h2>Plugin: CSS Snippets</h2>
+		<pre>new CSSSnippet(document.getElementById('snippet'));</pre>
+		<ul>
+			<li>Dynamically edit CSS and reflect the results in any element's style
+				<ul>
+					<li>Which one? Specify a selector with the <code>data-subject</code> attribute or leave blank for the slide to be the subject</li>
+				</ul>
+			<li>Automatically prefixes CSS3 properties/values, when needed
+				<ul>
+					<li>Also does it with the style attribute (statically) if the element is not a text field (doesn't work in IE and Firefox 3.6)</li>
+				</ul>
+			</li>
+			<li>Textarea automatically adjusts rows/font-size on line break (use class <code>dont-adjust</code> to turn off)</li>
+		</ul>
+	</section>
+	
+	<section class="slide">
+		<h2>CSS Snippets demo</h2>
+		<p>Edit the following CSS code:</p>
+		<textarea class="snippet">background-color:red;
+background-image: linear-gradient(red, #600)</textarea>
+	</section>
+	
+	<section class="slide" id="animation-demo">
+		<h2>CSS Snippets: raw CSS</h2>
+		<textarea class="snippet" data-raw>@keyframes rainbow {
+	from, to { background: red }
+	16% { background: yellow }
+	33% { background: green }
+	50% { background: aqua }
+	66% { background: blue }
+	83% { background: fuchsia }
+}
+
+#animation-demo { animation: 30s rainbow infinite; }</textarea>
+	</section>
+	
+	<section class="slide">
+		<h2>Plugin: CSS Controls</h2>
+		<ul>
+			<li>Use sliders and other controls to adjust CSS values
+				<ul>
+					<li>Which one? Specify a selector with the <code>data-subject</code> attribute or leave blank for the slide to be the subject</li>
+					<li>Specify style with <code>data-style</code> (use <code>{value}</code> where the result will be)</li>
+				</ul>
+			<li>Automatically prefixes CSS3 properties/values, when needed</li>
+		</ul>
+	</section>
+	
+	<section class="slide" id="css-controls-demo">
+		<h2>CSS Controls demo</h2>
+		<label>Slide lightness: 
+			<input type="range" min="0" max="255" value="128" data-style="background-color:rgb({value}, {value}, {value});" class="css-control" />
+		</label>
+		<label>
+			border-width:
+			<input type="number" min="0" max="60" value="30" data-style="border-width: {value}px;" class="css-control" size="5" />
+		</label>
+		<label>
+			font-family:
+			<select data-style="font-family: {value};" class="css-control">
+				<option selected>sans-serif</option>
+				<option>Georgia, serif</option>
+				<option>Consolas, monospace</option>
+				<option>'Trebuchet MS', sans-serif</option>
+			</select>
+		</label>
+	</section>
+	
+	<section class="slide">
+		<h2>Plugin: Code highlight</h2>
+		<ul>
+			<li>Syntax highlighting for every <code>&lt;code&gt;</code> element with a <code>lang</code> attribute.</li>
+			<li>Only highlights when the slide becomes active, for performance</li>
+			<li>Currently only supports JavaScript, but it's easy to add any language</li>
+			<li>Styling done through easy to understand classes like <code>.string</code> or <code>.comment</code></li>
+		</ul>
+	</section>
+	
+	<section class="slide">
+		<h2>Code highlight example</h2>
+		<pre><code lang="javascript">// Comment
+document.addEventListener('DOMAttrModified',function(e) {
+  var node = e.target, attr = e.attrName;
+  if(/^input$/i.test(node.nodeName) 
+    &amp;&amp; (attr === 'placeholder' || attr === 'value')
+    || foo > 5)
+      Placeholder.update(node);
+}, false);</code></pre>
+	</section>
+</section>
+<footer class="slide" title="The End">
+	<h2>Thank you!</h2>
+	<p>Get it or contribute at <a href="http://github.com/LeaVerou/CSSS">http://github.com/LeaVerou/CSSS</a></p>
+	<p>Credits:</p>
+	<ul>
+		<li><a href="http://lukeroberts.us/2008/12/wallpaper-colourful-wood/">Colored wood background by Luke Roberts</a></li>
+		<li>The name CSSS is actually inspired by S5, as you could probably guess ;-)</li>
+		<li>A big thanks to the community at Github for various contributions to this project</li>
+	</ul>
+</footer>
+
+<script src="slideshow.js"></script>
+<script src="plugins/css-edit.js"></script>
+<script src="plugins/css-snippets.js"></script>
+<script src="plugins/css-controls.js"></script>
+<script src="plugins/code-highlight.js"></script>
+<script>
+var slideshow = new SlideShow();
+
+var snippets = document.querySelectorAll('.snippet');
+for(var i=0; i<snippets.length; i++) {
+	new CSSSnippet(snippets[i]);
+}
+
+var cssControls = document.querySelectorAll('.css-control');
+for(var i=0; i<cssControls.length; i++) {
+	new CSSControl(cssControls[i]);
+}
+</script>
+	
+</body>
+</html>
